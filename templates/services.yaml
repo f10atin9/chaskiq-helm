@@ -1,0 +1,53 @@
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: chaskiq-web
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: chaskiq-web
+spec:
+  ports:
+    - name: https-web
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+  selector:
+    app: chaskiq
+  type: ClusterIP
+  sessionAffinity: None
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: chaskiq
+  namespace: {{ .Release.Namespace }}
+spec:
+  tls:
+    - hosts:
+        - { { .Values.required.HOST } }
+      secretName: chaskiq
+  rules:
+    - host: { { .Values.required.HOST } }
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: chaskiq-web
+                port:
+                  number: 3000
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: chaskiq
+  namespace: {{ .Release.Namespace }}
+data:
+  tls.crt: {{ .Values.config.tls.crt }}
+  tls.key: {{ .Values.config.tls.key }}
+type: kubernetes.io/tls

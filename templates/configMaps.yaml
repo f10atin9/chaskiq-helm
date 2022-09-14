@@ -1,0 +1,31 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: chaskiq-postgres
+  namespace: {{ .Release.Namespace }}
+data:
+  PGDATA: /var/lib/postgresql/data/pgdata
+  POSTGRES_DB: chaskiq
+  POSTGRES_PASSWORD: passw0rd
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: chaskiq
+  namespace: {{ .Release.Namespace }}
+data:
+  DATABASE_URL: "postgresql://postgres:passw0rd@chaskiq-postgres.{{ .Release.Namespace }}:5432/chaskiq"
+  REDIS_URL: "redis://chaskiq-redis.{{ .Release.Namespace }}:6379/0"
+  {{- with .Values.config.required }}
+    {{ toYaml . | nindent 2 }}
+  {{- end }}
+
+  {{ - with .Values.config.storage }}
+    {{ toYaml . | nindent 2 }}
+  {{ - end }}
+
+  {{ - with .Values.config.email }}
+    {{ toYaml . | nindent 2 }}
+  {{ - end }}
+
+
