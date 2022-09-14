@@ -28,10 +28,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - { { .Values.required.HOST } }
+        - {{ .Values.config.domain }}
       secretName: chaskiq
   rules:
-    - host: { { .Values.required.HOST } }
+    - host: {{ .Values.config.domain }}
       http:
         paths:
           - path: /

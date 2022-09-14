@@ -68,7 +68,7 @@ spec:
         resources:
           requests:
             storage: 10Gi
-        storageClassName: csi-standard
+        storageClassName: {{ .Values.config.storage.STORAGE_CLASS }}
         volumeMode: Filesystem
       status:
         phase: Pending
@@ -136,7 +136,7 @@ spec:
         resources:
           requests:
             storage: 10Gi
-        storageClassName: csi-standard
+        storageClassName: {{ .Values.config.storage.STORAGE_CLASS }}
         volumeMode: Filesystem
       status:
         phase: Pending

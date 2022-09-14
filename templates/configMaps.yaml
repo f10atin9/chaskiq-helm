@@ -14,18 +14,20 @@ metadata:
   name: chaskiq
   namespace: {{ .Release.Namespace }}
 data:
+  HOST: "https://{{ .Values.config.domain }}"
+  WS: "wss://{{ .Values.config.domain }}/cable"
   DATABASE_URL: "postgresql://postgres:passw0rd@chaskiq-postgres.{{ .Release.Namespace }}:5432/chaskiq"
   REDIS_URL: "redis://chaskiq-redis.{{ .Release.Namespace }}:6379/0"
   {{- with .Values.config.required }}
     {{ toYaml . | nindent 2 }}
   {{- end }}
 
-  {{ - with .Values.config.storage }}
+  {{- with .Values.config.storage }}
     {{ toYaml . | nindent 2 }}
-  {{ - end }}
+  {{- end }}
 
-  {{ - with .Values.config.email }}
+  {{- with .Values.config.email }}
     {{ toYaml . | nindent 2 }}
-  {{ - end }}
+  {{- end }}
 
 
