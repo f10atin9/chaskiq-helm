@@ -43,7 +43,7 @@ spec:
                   key: POSTGRES_PASSWORD
           resources: {}
           volumeMounts:
-            - name: chaskiq-postgres-data
+            - name: data
               mountPath: /var/lib/postgresql/data
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
@@ -59,8 +59,8 @@ spec:
     - kind: PersistentVolumeClaim
       apiVersion: v1
       metadata:
-        name: chaskiq-postgres-data
-        namespace: chaskiq
+        name: data
+        namespace: {{ .Release.Namespace }}
         creationTimestamp: null
       spec:
         accessModes:
@@ -111,7 +111,7 @@ spec:
               protocol: TCP
           resources: {}
           volumeMounts:
-            - name: chaskiq-redis
+            - name: data
               mountPath: /data
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
@@ -127,8 +127,8 @@ spec:
     - kind: PersistentVolumeClaim
       apiVersion: v1
       metadata:
-        name: chaskiq-redis-data
-        namespace: chaskiq
+        name: data
+        namespace: {{ .Release.Namespace }}
         creationTimestamp: null
       spec:
         accessModes:
